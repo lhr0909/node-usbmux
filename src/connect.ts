@@ -14,7 +14,10 @@ import { UsbmuxdError } from './error';
  * - resolves {net.Socket} - Tunneled tcp connection to device
  * - rejects  {Error}
  */
-export async function connect(deviceID: number, devicePort: number): Promise<net.Socket> {
+export async function connect(
+  deviceID: number,
+  devicePort: number,
+): Promise<net.Socket> {
   return new Promise((resolve, reject) => {
     const conn = net.connect(address);
     const req = protocol.connect(deviceID, devicePort);

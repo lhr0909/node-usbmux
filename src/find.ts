@@ -11,18 +11,21 @@ import { createListener } from './listener';
  * @param  {object}  [opts]              - Options
  * @param  {integer} [opts.timeout=1000] - Search time (in ms) before failing
  * @param  {string}  [opts.udid]         - UDID of a specific device to find
- * @return {Q.promise}
+ * @return {Promise}
  * - resolves {integer} - DeviceID from usbmuxd needed for a connect request
  * - rejects  {Error}
  */
-export async function findDevice(opts: { timeout?: number, udid?: string }): Promise<number> {
+export async function findDevice(opts: {
+  timeout?: number;
+  udid?: string;
+}): Promise<number> {
   return new Promise((resolve, reject) => {
     const listener = createListener();
     opts = opts || {};
 
     const timer = setTimeout(function() {
       listener.end();
-      (opts.udid)
+      opts.udid
         ? reject(new Error('Requested device not connected'))
         : reject(new Error('No devices connected'));
     }, opts.timeout || 1000);

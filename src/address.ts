@@ -11,9 +11,8 @@
  *
  * @public
  */
-export const address = (process.platform === 'win32')
-  ? { port: 27015 }
-  : { path: '/var/run/usbmuxd' };
+export const address =
+  process.platform === 'win32' ? { port: 27015 } : { path: '/var/run/usbmuxd' };
 
 // TODO: allow setting a different address for entire lib
 

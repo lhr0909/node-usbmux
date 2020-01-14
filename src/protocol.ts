@@ -31,7 +31,6 @@ import * as plist from 'plist';
  * - https://www.theiphonewiki.com/wiki/Usbmux (binary protocol)
  */
 export const protocol = (function() {
-
   /**
    * Pack a request object into a buffer for usbmuxd
    *
@@ -39,14 +38,14 @@ export const protocol = (function() {
    * @return {Buffer}
    */
   function pack(payload_obj) {
-    var payload_plist = plist.build(payload_obj)
-      , payload_buf = Buffer.from(payload_plist);
+    var payload_plist = plist.build(payload_obj);
+    var payload_buf = Buffer.from(payload_plist);
 
     var header = {
       len: payload_buf.length + 16,
       version: 1,
       request: 8,
-      tag: 1
+      tag: 1,
     };
 
     var header_buf = Buffer.alloc(16);
@@ -63,7 +62,7 @@ export const protocol = (function() {
    * Swap endianness of a 16bit value
    */
   function byteSwap16(val) {
-    return ((val & 0xFF) << 8) | ((val >> 8) & 0xFF);
+    return ((val & 0xff) << 8) | ((val >> 8) & 0xff);
   }
 
   /**
@@ -71,9 +70,9 @@ export const protocol = (function() {
    * @type {Buffer}
    */
   var listen = pack({
-    MessageType:         'Listen',
+    MessageType: 'Listen',
     ClientVersionString: 'node-usbmux',
-    ProgName:            'node-usbmux'
+    ProgName: 'node-usbmux',
   });
 
   /**
@@ -87,11 +86,11 @@ export const protocol = (function() {
    */
   function connect(deviceID, port) {
     return pack({
-      MessageType:         'Connect',
+      MessageType: 'Connect',
       ClientVersionString: 'node-usbmux',
-      ProgName:            'node-usbmux',
-      DeviceID:            deviceID,
-      PortNumber:          byteSwap16(port)
+      ProgName: 'node-usbmux',
+      DeviceID: deviceID,
+      PortNumber: byteSwap16(port),
     });
   }
 
@@ -151,6 +150,6 @@ export const protocol = (function() {
   return {
     listen: listen,
     connect: connect,
-    makeParser: makeParser
+    makeParser: makeParser,
   };
 })();

@@ -1,4 +1,3 @@
-
 import * as net from 'net';
 
 import { devices } from './devices';
@@ -18,7 +17,10 @@ import { findDevice } from './find';
  *
  * @public
  */
-export async function getTunnel(devicePort, opts: { timeout?: number, udid?: string }): Promise<net.Socket> {
+export async function getTunnel(
+  devicePort,
+  opts: { timeout?: number; udid?: string },
+): Promise<net.Socket> {
   opts = opts || {};
   let udid: string;
   let deviceID: number;

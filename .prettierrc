@@ -1,0 +1,10 @@
+{
+  "filepath": "/Users/simon/Documents/git-repo/node-usbmux/src/usbmux.ts",
+  "parser": "typescript",
+  "useTabs": false,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "endOfLine": "lf",
+  "semi": true,
+  "trailingComma": "all"
+}

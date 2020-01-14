@@ -25,7 +25,11 @@ export class Relay extends EventEmitter {
   private _listener;
   private _server;
 
-  constructor(devicePort: number, relayPort: number, opts: { timeout?: number, udid: string }) {
+  constructor(
+    devicePort: number,
+    relayPort: number,
+    opts: { timeout?: number; udid: string },
+  ) {
     super();
 
     if (!(this instanceof Relay)) {
@@ -56,7 +60,7 @@ export class Relay extends EventEmitter {
    * @param {*}      [data]
    */
   private _emit(event: string, data?: any) {
-    debug.relay('Emit: %s', event + ((data) ? ', Data: ' + data : ''));
+    debug.relay('Emit: %s', event + (data ? ', Data: ' + data : ''));
     this.emit(event, data);
   }
 
@@ -106,7 +110,8 @@ export class Relay extends EventEmitter {
    */
   private _startServer(): void {
     const _this = this;
-    this._server = net.createServer(this._handler.bind(this))
+    this._server = net
+      .createServer(this._handler.bind(this))
       .on('close', _this._emit.bind(this, 'close'))
       .on('error', function(err) {
         _this._listener.end();
@@ -138,30 +143,30 @@ export class Relay extends EventEmitter {
     }
 
     // Use specified device or choose one from available devices
-    var _this = this
-      , udid = this._udid || Object.keys(devices)[0]
-      , deviceID = devices[udid].DeviceID;
+    var _this = this,
+      udid = this._udid || Object.keys(devices)[0],
+      deviceID = devices[udid].DeviceID;
 
-      try {
-    const tunnel = await connect(deviceID, this._devicePort);
-        // pipe connection & tunnel together
-        conn.pipe(tunnel).pipe(conn);
+    try {
+      const tunnel = await connect(deviceID, this._devicePort);
+      // pipe connection & tunnel together
+      conn.pipe(tunnel).pipe(conn);
 
-        _this._emit('connect');
+      _this._emit('connect');
 
-        conn.on('end', function() {
-          _this._emit('disconnect');
-          tunnel.end();
-          conn.end();
-        });
-
-        conn.on('error', function() {
-          tunnel.end();
-          conn.end();
-        });
-      } catch (err) {
-        _this._emit('error', err);
+      conn.on('end', function() {
+        _this._emit('disconnect');
+        tunnel.end();
         conn.end();
-      }
+      });
+
+      conn.on('error', function() {
+        tunnel.end();
+        conn.end();
+      });
+    } catch (err) {
+      _this._emit('error', err);
+      conn.end();
+    }
   }
 }
