@@ -17,10 +17,10 @@ import { createListener } from './listener';
  */
 export async function findDevice(opts: { timeout?: number, udid?: string }): Promise<number> {
   return new Promise((resolve, reject) => {
-    var listener = createListener();
+    const listener = createListener();
     opts = opts || {};
 
-    var timer = setTimeout(function() {
+    const timer = setTimeout(function() {
       listener.end();
       (opts.udid)
         ? reject(new Error('Requested device not connected'))

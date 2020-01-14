@@ -23,7 +23,7 @@ export async function connect(deviceID: number, devicePort: number): Promise<net
      * Handle complete messages from usbmuxd
      * @function
      */
-    var parse = protocol.makeParser(function onMsgComplete(msg) {
+    const parse = protocol.makeParser(function onMsgComplete(msg) {
       debug.connect('Response: \n%o', msg);
 
       if (msg.MessageType === 'Result' && msg.Number === 0) {
